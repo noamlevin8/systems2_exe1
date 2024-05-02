@@ -9,7 +9,7 @@ using namespace std;
 namespace Algorithms {
         int isConnected(Graph g);
         string shortestPath(Graph g, int start, int end);
-        int isContainsCycle(Graph g);
+        string isContainsCycle(Graph g);
         string isBipartite(Graph g);
         string negativeCycle(Graph g);
 }

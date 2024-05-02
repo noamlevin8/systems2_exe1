@@ -12,7 +12,7 @@ TEST_CASE("Test isConnected")
         {1, 0, 1},
         {0, 1, 0}};
     g.loadGraph(graph);
-    CHECK(Algorithms::isConnected(g) == true);
+    CHECK(Algorithms::isConnected(g) == 1);
 
     vector<vector<int>> graph2 = {
         {0, 1, 1, 0, 0},
@@ -21,7 +21,7 @@ TEST_CASE("Test isConnected")
         {0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
-    CHECK(Algorithms::isConnected(g) == false);
+    CHECK(Algorithms::isConnected(g) == 0);
 }
 
 TEST_CASE("Test shortestPath")
@@ -51,7 +51,7 @@ TEST_CASE("Test isContainsCycle")
         {1, 0, 1},
         {0, 1, 0}};
     g.loadGraph(graph);
-    CHECK(Algorithms::isContainsCycle(g) == false);
+    CHECK(Algorithms::isContainsCycle(g) == "0");
 
     vector<vector<int>> graph2 = {
         {0, 1, 1, 0, 0},
@@ -60,7 +60,7 @@ TEST_CASE("Test isContainsCycle")
         {0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph2);
-    CHECK(Algorithms::isContainsCycle(g) == true);
+    CHECK(Algorithms::isContainsCycle(g) == "1");
 }
 TEST_CASE("Test isBipartite")
 {

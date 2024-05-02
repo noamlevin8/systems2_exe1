@@ -14,8 +14,8 @@ namespace Algorithms {
         return "1";
     }
 
-    int isContainsCycle(Graph g) {
-        return 1;
+    string isContainsCycle(Graph g) {
+        return "1";
     }
 
     string isBipatite(Graph g) {
