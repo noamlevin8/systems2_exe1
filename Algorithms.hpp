@@ -3,10 +3,13 @@
 
 #include "Graph.hpp"
 
-namespace algo {
+using namespace ariel;
+using namespace std;
+
+namespace Algorithms {
         int isConnected(Graph g);
-        int shortestPath(Graph g, int start, int end);
+        string shortestPath(Graph g, int start, int end);
         int isContainsCycle(Graph g);
-        int isBipartite(Graph g);
-        void negativeCycle(Graph g);
+        string isBipartite(Graph g);
+        string negativeCycle(Graph g);
 }

@@ -1,29 +1,28 @@
 // ID: 326662574
 // MAIL: noamlevin11@gmail.com
 
-using namespace std;
-
 #include "Algorithms.hpp"
 
+using namespace std;
 
-namespace algo {
+namespace Algorithms {
     int isConnected(Graph g) {
         return 1;
     }
 
-    int shortestPath(Graph g, int start, int end) {
-        return 1;
+    string shortestPath(Graph g, int start, int end) {
+        return "1";
     }
 
     int isContainsCycle(Graph g) {
         return 1;
     }
 
-    int isBipatite(Graph g) {
-        return 1;
+    string isBipatite(Graph g) {
+        return "1";
     }
 
-    void negativeCycle(Graph g) {
-
+    string negativeCycle(Graph g) {
+        return "1";
     }
 }

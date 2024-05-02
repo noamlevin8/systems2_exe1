@@ -4,21 +4,24 @@
 #include <iostream>
 #include <vector>
 
-class Graph {
+namespace ariel {
 
-private:
-        vector<vector<int>> graph;
-        int vertex_num;
-        int edge_num;
+        class Graph {
 
-public:
-        void loadGraph(vector<vector<int>> graph);
-        void printGraph();
+        private:
+                vector<vector<int>> graph;
+                int vertex_num;
+                int edge_num;
 
-        Graph()
-        {
-                fill(graph.begin(), graph.end(), 0);
-                vertex_num = 0;
-                edge_num = 0;
-        }
-};
+        public:
+                void loadGraph(vector<vector<int>> graph);
+                void printGraph();
+
+                Graph()
+                {
+                        fill(graph.begin(), graph.end(), 0);
+                        vertex_num = 0;
+                        edge_num = 0;
+                }
+        };
+}

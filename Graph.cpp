@@ -1,9 +1,10 @@
 // ID: 326662574
 // MAIL: noamlevin11@gmail.com
 
-using namespace std;
-
 #include "Graph.hpp"
+
+using namespace std;
+using namespace ariel;
 
 void Graph::loadGraph(vector<vector<int>> new_graph) {
     if(graph.size() == graph[0].size())
@@ -27,10 +28,10 @@ void Graph::loadGraph(vector<vector<int>> new_graph) {
 
     else
     {
-        throw std::invalid_argument("Invalid graph: The graph is not a square matrix.");
+        throw invalid_argument("Invalid graph: The graph is not a square matrix.");
     }
 }
 
 void Graph::printGraph() {
-        
+        cout << "Graph with " << vertex_num << "vertices and " << edge_num << "edges.\n" << endl;
 }
