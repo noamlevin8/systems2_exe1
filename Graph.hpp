@@ -1,8 +1,12 @@
 // ID: 326662574
 // MAIL: noamlevin11@gmail.com
 
+#pragma once
+
 #include <iostream>
 #include <vector>
+
+using namespace std;
 
 namespace ariel {
 
@@ -25,7 +29,8 @@ namespace ariel {
 
                 Graph()
                 {
-                        fill(graph.begin(), graph.end(), 0);
+                        //fill(graph.begin(), graph.end(), 0);
+                        graph = {};
                         vertex_num = 0;
                         edge_num = 0;
                         if_directed = 0;

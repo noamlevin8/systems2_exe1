@@ -23,8 +23,8 @@ namespace Algorithms {
     }
 
     string isConnected(Graph g) {
-        if(!g.getIfDirected())
-            return 0;
+        // if(!g.getIfDirected())
+        //     return 0;
 
         // Doing DFS from the first vertex
         vector<bool> visited(g.getGraph().size(),false);
@@ -34,10 +34,10 @@ namespace Algorithms {
         for(bool v : visited)
         {
             if(!v)
-                return "0\n";
+                return "0";
         }
 
-        return "1\n";
+        return "1";
     }
 
     vector<int> reconstructPath(int start, int end, vector<vector<int>>& shortest_graph) 
@@ -68,7 +68,7 @@ namespace Algorithms {
     string shortestPath(Graph g, int start, int end) {
 
         if(negativeCycle(g) == "1")
-            return "-1\n";
+            return "-1";
 
         vector<vector<int>> shortest_graph;
 
@@ -100,7 +100,7 @@ namespace Algorithms {
         vector<int> path = reconstructPath(start, end, shortest_graph);
 
         if(path.empty())
-            return "-1\n";
+            return "-1";
 
         string result;
 
@@ -109,7 +109,7 @@ namespace Algorithms {
             result += to_string(node) + "->";
         }
 
-        return result + "\n";
+        return result;
     }
 
     bool hasCycleDFS(Graph g, int v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle)
@@ -170,7 +170,7 @@ namespace Algorithms {
             }
         }
 
-        return "0\n";
+        return "0";
     }
 
     bool ifBipartite(Graph g, int src, vector<int>& color) 
@@ -238,7 +238,7 @@ namespace Algorithms {
 
         result += "}";
 
-        return result + "\n";
+        return result;
     }
 
     vector<int> bellmanFord(Graph g, int V, int src)
@@ -327,6 +327,6 @@ namespace Algorithms {
             }
         }
 
-        return result + "\n";
+        return result;
     }
 }

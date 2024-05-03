@@ -1,6 +1,8 @@
 // ID: 326662574
 // MAIL: noamlevin11@gmail.com
 
+#pragma once
+
 #include "Graph.hpp"
 #include <unordered_map>
 #include <queue>
