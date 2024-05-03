@@ -12,16 +12,23 @@ namespace ariel {
                 vector<vector<int>> graph;
                 int vertex_num;
                 int edge_num;
+                int if_directed; // 1 - if directed, 0 - if not
 
         public:
-                void loadGraph(vector<vector<int>> graph);
+                void loadGraph(vector<vector<int>> graph, int directed);
                 void printGraph();
+
+                vector<vector<int>> getGraph();
+                int getVertexNum();
+                int getEdgeNum();
+                int getIfDirected();                
 
                 Graph()
                 {
                         fill(graph.begin(), graph.end(), 0);
                         vertex_num = 0;
                         edge_num = 0;
+                        if_directed = 0;
                 }
         };
 }

@@ -6,7 +6,7 @@
 using namespace std;
 using namespace ariel;
 
-void Graph::loadGraph(vector<vector<int>> new_graph) {
+void Graph::loadGraph(vector<vector<int>> new_graph, int directed) {
     if(graph.size() == graph[0].size())
     {
         graph = new_graph;
@@ -22,8 +22,13 @@ void Graph::loadGraph(vector<vector<int>> new_graph) {
                     count++;
             }
         }
-
-        edge_num = count;
+        
+        if(!directed)
+            edge_num = count/2;
+        else
+            edge_num = count;
+        
+        if_directed = directed;
     }
 
     else
@@ -34,4 +39,24 @@ void Graph::loadGraph(vector<vector<int>> new_graph) {
 
 void Graph::printGraph() {
         cout << "Graph with " << vertex_num << "vertices and " << edge_num << "edges.\n" << endl;
+}
+
+vector<vector<int>> Graph::getGraph()
+{
+    return graph;
+}
+
+int Graph::getVertexNum()
+{
+    return vertex_num;
+}
+
+int Graph::getEdgeNum()
+{
+    return edge_num;
+}
+
+int Graph::getIfDirected()
+{
+    return if_directed;
 }

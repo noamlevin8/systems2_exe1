@@ -20,7 +20,7 @@ int main()
         {0, 1, 0},
         {1, 0, 1},
         {0, 1, 0}};
-    g.loadGraph(graph); // Load the graph to the object.
+    g.loadGraph(graph, 1); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 3 vertices and 4 edges."
     cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
@@ -36,7 +36,7 @@ int main()
         {0, 0, 1, 0, 0},
         {0, 0, 0, 0, 0}};
 
-    g.loadGraph(graph2); // Load the graph to the object.
+    g.loadGraph(graph2, 1); // Load the graph to the object.
 
     g.printGraph();                                    // Should print: "Graph with 5 vertices and 8 edges."
     cout << Algorithms::isConnected(g) << endl;        // Should print: "0" (false).
@@ -58,9 +58,9 @@ int main()
         // {0, 0, 4, 0, 5},
         // {0, 0, 0, 5, 0}};
         
-    g.loadGraph(graph3); // Load the graph to the object.
+    g.loadGraph(graph3, 1); // Load the graph to the object.
 
-    g.printGraph();                                    // Should print: "Graph with 5 vertices and 10 edges."
+    g.printGraph();                                    // Should print: "Graph with 5 vertices and 8 edges."
     cout << Algorithms::isConnected(g) << endl;        // Should print: "1" (true).
     cout << Algorithms::shortestPath(g, 0, 4) << endl; // Should print: 0->2->3->4.
     cout << Algorithms::isContainsCycle(g) << endl;    // Should print: "0" (false).
@@ -75,7 +75,7 @@ int main()
         {0, 0, 0, 5}};
     try
     {
-        g.loadGraph(graph4); // Load the graph to the object.
+        g.loadGraph(graph4, 0); // Load the graph to the object.
     }
     catch (const std::invalid_argument &e)
     {
