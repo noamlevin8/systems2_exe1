@@ -7,15 +7,15 @@ using namespace std;
 
 namespace Algorithms {
 
-    void dfs(Graph g, int v, vector<bool>& visited)
+    void dfs(Graph g, size_t v, vector<bool>& visited)
     {
         visited[v] = true;
 
-        int i;
+        size_t i;
 
         for(i = 0; i < g.getGraph().size(); i++)
         {
-            if(g.getGraph()[v][i] == 1 && !visited[i])
+            if(g.getGraph()[v][i] != 0 && !visited[i])
             {
                 dfs(g, i, visited);
             }
@@ -40,47 +40,35 @@ namespace Algorithms {
         return "1";
     }
 
-    vector<int> reconstructPath(int start, int end, vector<vector<int>>& shortest_graph) 
-    {
-        vector<int> path;
-        int i;
+    string shortestPath(Graph g, int start, int end) { // Negative cycle
 
-        for (i = start; i != end; i = shortest_graph[i][end]) 
-        {
-            if (i == -1) 
-            {
-                return {}; // No path exists
-            }
+        int size = g.getGraph().size();
+        int dis[size][size]; 
+        int Next[size][size]; 
 
-            path.push_back(i);
+        const int INF = 1e7;
+
+
+        for (size_t i = 0; i < size; i++) 
+        { 
+            for (size_t j = 0; j < size; j++) 
+            { 
+                if(g.getGraph()[i][j] == 0)
+                    dis[i][j] = INF; 
+
+                else
+                    dis[i][j] = g.getGraph()[i][j];
+    
+                // No edge between node 
+                // i and j 
+                if (g.getGraph()[i][j] == 0) 
+                    Next[i][j] = -1; 
+                else
+                    Next[i][j] = j; 
+            } 
         }
 
-        if (shortest_graph[start][end] == -1) 
-        {
-            return {}; // No path exists
-        }
-
-        path.push_back(end);
-
-        return path;
-    }
-
-    string shortestPath(Graph g, int start, int end) {
-
-        if(negativeCycle(g) == "1")
-            return "-1";
-
-        vector<vector<int>> shortest_graph;
-
-        int i, j, k;
-
-        for(i = 0; i < g.getGraph().size(); i++)
-        {
-            for(j = 0; j < g.getGraph()[0].size(); j++)
-            {
-                shortest_graph[i][j] = g.getGraph()[i][j];
-            }
-        }
+        size_t k, i, j;
 
         for(k = 0; k < g.getGraph().size(); k++)
         {
@@ -88,166 +76,186 @@ namespace Algorithms {
             {
                 for(j = 0; j < g.getGraph()[0].size(); j++)
                 {
-                    if(shortest_graph[i][k] != 0 && shortest_graph[k][j] != 0)
+                    if(dis[i][k] != INF && dis[k][j] != INF)
                     {
-                        if(shortest_graph[i][j] > (shortest_graph[i][k] + shortest_graph[i][k]) || shortest_graph[i][j] == 0)
-                            shortest_graph[i][j] = shortest_graph[i][k] + shortest_graph[i][k];
+                        if(dis[i][j] > (dis[i][k] + dis[i][k]))
+                        {
+                            dis[i][j] = dis[i][k] + dis[i][k];
+                            Next[i][j] = Next[i][k];
+                        }
                     }
                 }
             }
         }
 
-        vector<int> path = reconstructPath(start, end, shortest_graph);
+        // If there's no path between 
+        // node u and v, simply return 
+        // an empty array 
+        if (Next[start][end] == -1) 
+            return "-1"; 
+    
+        // Storing the path in a vector 
+        vector<int> path = { start }; 
 
-        if(path.empty())
-            return "-1";
+        while (start != end) 
+        { 
+            start = Next[start][end]; 
+            path.push_back(start); 
+        } 
 
         string result;
 
-        for(int node : path)
-        {
-            result += to_string(node) + "->";
-        }
+        size_t n = path.size();
+
+        for (size_t i = 0; i < n - 1; i++) 
+            result += to_string(path[i]) + "->"; 
+
+        result += to_string(path[n - 1]); 
 
         return result;
     }
 
-    bool hasCycleDFS(Graph g, int v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle)
-    {
-        visited[v] = true;
+    // bool hasCycleDFS(Graph g, size_t v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle)
+    // {
+    //     visited[v] = true;
 
-        for(int neighbor : g.getGraph()[v])
-        {
-            if(!visited[neighbor])
-            {
-                parent[neighbor] = v; // Store the parent of neighbor
+    //     size_t i;
 
-                if(hasCycleDFS(g, neighbor, visited, parent, cycle))
-                {
-                    cycle += to_string(v);
-                    return true;
-                }
-            }
-            else if(parent.find(v) != parent.end() && parent[v] != neighbor)
-            {
-                cycle += to_string(neighbor) + "->";
+    //     for(i = 0; i < g.getGraph()[v].size(); i++)
+    //     {
+    //         int neighbor = g.getGraph()[v][i];
 
-                int u = v;
+    //         if(!visited[static_cast<size_t>(neighbor)])
+    //         {
+    //             parent[neighbor] = v;
 
-                while(u != neighbor)
-                {
-                    cycle += to_string(u) + "->";
-                    u = parent[u];
-                }
+    //             if(hasCycleDFS(g, neighbor, visited, parent, cycle))
+    //             {
+    //                 cycle += to_string(v);
+    //                 return true;
+    //             }
+    //         }
+    //         else if(parent.find(v) != parent.end() && parent[v] != neighbor)
+    //         {
+    //             cycle += to_string(neighbor) + "->";
 
-                cycle += to_string(neighbor);
+    //             int u = v;
 
-                return true;
-            }
-        }
+    //             while(u != neighbor)
+    //             {
+    //                 cycle += to_string(u) + "->";
+    //                 u = parent[u];
+    //             }
 
-        return false;
-    }
+    //             cycle += to_string(neighbor);
 
-    string isContainsCycle(Graph g) {
+    //             return true;
+    //         }
+    //     }
 
-        vector<bool> visited(g.getGraph().size(), false);
+    //     return false;
+    // }
 
-        unordered_map<int,int> parent;
+    // string isContainsCycle(Graph g) {
 
-        string cycle;
+    //     vector<bool> visited(g.getGraph().size(), false);
 
-        int i;
+    //     unordered_map<int,int> parent;
 
-        for(i = 0; i < g.getGraph().size(); i++)
-        {
-            if(!visited[i])
-            {
-                if(hasCycleDFS(g, i, visited, parent, cycle))
-                {
-                    return cycle + "\n";
-                }
-            }
-        }
+    //     string cycle;
 
-        return "0";
-    }
+    //     size_t i;
 
-    bool ifBipartite(Graph g, int src, vector<int>& color) 
-    {
-        queue<int> q;
+    //     for(i = 0; i < g.getGraph().size(); i++)
+    //     {
+    //         if(!visited[i])
+    //         {
+    //             if(hasCycleDFS(g, i, visited, parent, cycle))
+    //             {
+    //                 return cycle;
+    //             }
+    //         }
+    //     }
 
-        q.push(src);
+    //     return "0";
+    // }
 
-        color[src] = 0; // Color the source node with 0
+    // bool ifBipartite(Graph g, size_t src, vector<int>& color) 
+    // {
+    //     queue<int> q;
 
-        while (!q.empty()) 
-        {
-            int u = q.front();
-            q.pop();
+    //     q.push(src);
 
-            for (int v : g.getGraph()[u]) 
-            {
-                if (color[v] == -1) 
-                {
-                    color[v] = 1 - color[u]; // Color adjacent node with different color
-                    q.push(v);
-                } 
+    //     color[src] = 0; // Color the source node with 0
+
+    //     while (!q.empty()) 
+    //     {
+    //         size_t u = q.front();
+    //         q.pop();
+
+    //         for (size_t v : g.getGraph()[u]) 
+    //         {
+    //             if (color[v] == -1) 
+    //             {
+    //                 color[v] = 1 - color[u]; // Color adjacent node with different color
+    //                 q.push(v);
+    //             } 
                 
-                else if (color[v] == color[u]) 
-                {
-                    return false; // If adjacent nodes have the same color, graph is not bipartite
-                }
-            }
-        }
-        return true;
-}
+    //             else if (color[v] == color[u]) 
+    //             {
+    //                 return false; // If adjacent nodes have the same color, graph is not bipartite
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 
-    string isBipartite(Graph g) {
+    // string isBipartite(Graph g) {
 
-        vector<int> color(g.getGraph().size(), -1); // Initialize color array, -1 indicates uncolored
-        vector<vector<int>> bipartition(2);
+    //     vector<int> color(g.getGraph().size(), -1); // Initialize color array, -1 indicates uncolored
+    //     vector<vector<int>> bipartition(2);
 
-        int i;
+    //     size_t i;
 
-        for(i = 0; i < g.getGraph().size(); i++)
-        {
-            if(color[i] == -1)
-            {
-                if(!ifBipartite(g, i, color))
-                {
-                    return "0";
-                }
-            }
+    //     for(i = 0; i < g.getGraph().size(); i++)
+    //     {
+    //         if(color[i] == -1)
+    //         {
+    //             if(!ifBipartite(g, i, color))
+    //             {
+    //                 return "0";
+    //             }
+    //         }
 
-            bipartition[color[i]].push_back(i); // Add node to appropriate partition based on color
-        }
+    //         // Cast the index to size_t
+    //         bipartition[static_cast<size_t>(color[i])].push_back(static_cast<int>(i)); // Add node to appropriate partition based on color
+    //     }
 
-        string result;
+    //     string result;
 
-        result += "The graph is bipartite: A = {";
-        for (int node : bipartition[0]) {
-            result += to_string(node) + ",";
-        }
+    //     result += "The graph is bipartite: A = {";
+    //     for (int node : bipartition[0]) {
+    //         result += to_string(node) + ",";
+    //     }
 
-        result += "}, B = {";
+    //     result += "}, B = {";
 
-        for (int node : bipartition[1]) {
-            result += to_string(node) + ",";
-        }
+    //     for (int node : bipartition[1]) {
+    //         result += to_string(node) + ",";
+    //     }
 
-        result += "}";
+    //     result += "}";
 
-        return result;
-    }
+    //     return result;
+    // }
 
-    vector<int> bellmanFord(Graph g, int V, int src)
+    vector<int> bellmanFord(Graph g, size_t V, size_t src)
     {
         vector<int> dist(V, numeric_limits<int>::max());
         vector<int> parent(V, -1);
         dist[src] = 0;
 
-        int i, j, k;
+        size_t i, j, k;
 
         // Relax |V| - 1 times (if directed)
         for(k = 0; k < V - 1; k++)
@@ -273,19 +281,19 @@ namespace Algorithms {
                 if(dist[i] != numeric_limits<int>::max() && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
                     vector<int> cycle;
-                    int node = j;
+                    size_t node = j;
 
                     for (int i = 0; i < V; i++) 
                     {
-                        node = parent[node];
+                        node = static_cast<size_t>(parent[node]);
                     }
 
-                    int start = node;
+                    size_t start = node;
 
                     do 
                     {
-                        cycle.push_back(node);
-                        node = parent[node];
+                        cycle.push_back(static_cast<int>(node));
+                        node = static_cast<size_t>(parent[node]);
                     } while (node != start);
 
                     // while (node != start)
@@ -294,20 +302,19 @@ namespace Algorithms {
                     //     node = parent[node];
                     // }
 
-                    cycle.push_back(start);
+                    cycle.push_back(static_cast<int>(start));
 
                     return cycle;
                 }
             }
         }
-
         return {}; // No negative cycle found
     }
 
 
     string negativeCycle(Graph g) {
 
-        int V = g.getVertexNum();
+        size_t V = static_cast<size_t>(g.getVertexNum());
 
         vector<int> cycle = bellmanFord(g, V, 0);
 

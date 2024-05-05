@@ -7,38 +7,34 @@ using namespace std;
 using namespace ariel;
 
 void Graph::loadGraph(vector<vector<int>> new_graph, int directed) {
-    if(graph.size() == graph[0].size())
-    {
-        graph = new_graph;
-        vertex_num = new_graph.size();
 
-        int count = 0, i, j;
-
-        for(i = 0; i < new_graph.size(); i++)
-        {
-            for(j = 0; j < new_graph[0].size(); j++)
-            {
-                if(new_graph[i][j] > 0)
-                    count++;
-            }
-        }
-        
-        if(!directed)
-            edge_num = count/2;
-        else
-            edge_num = count;
-        
-        if_directed = directed;
-    }
-
-    else
-    {
+    if(new_graph.size() != new_graph[0].size())
         throw invalid_argument("Invalid graph: The graph is not a square matrix.");
+
+    graph = new_graph;
+    vertex_num = new_graph.size();
+    if_directed = directed;
+
+    size_t i, j;
+    int count = 0;
+
+    for(i = 0; i < new_graph.size(); i++)
+    {
+        for(j = 0; j < new_graph[0].size(); j++)
+        {
+            if(new_graph[i][j] != 0)
+                count++;
+        }
     }
+
+    if(!directed)
+        edge_num = count/2;
+    else
+        edge_num = count;
 }
 
 void Graph::printGraph() {
-        cout << "Graph with " << vertex_num << "vertices and " << edge_num << "edges.\n" << endl;
+        cout << "Graph with " << vertex_num << " vertices and " << edge_num << " edges." << endl;
 }
 
 vector<vector<int>> Graph::getGraph()

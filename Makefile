@@ -7,7 +7,7 @@ CXXFLAGS=-std=c++11 -Werror -Wsign-conversion
 SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run: demo
+run: test
 	./$^
 
 #demo: Demo.o $(OBJECTS)

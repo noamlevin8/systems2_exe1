@@ -14,12 +14,12 @@ using namespace std;
 namespace Algorithms {
         string isConnected(Graph g);
         string shortestPath(Graph g, int start, int end);
-        string isContainsCycle(Graph g);
-        string isBipartite(Graph g);
+        //string isContainsCycle(Graph g);
+        //string isBipartite(Graph g);
         string negativeCycle(Graph g);
 
-        void dfs(Graph g, int v, vector<bool>& visited); // For the connected function
-        bool hasCycleDFS(Graph g, int v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle);
-        bool ifBipartite(Graph g, int src, vector<int>& color);
-        vector<int> bellmanFord(Graph g, int v, int src);
+        void dfs(Graph g, size_t v, vector<bool>& visited); // For the connected function
+        //bool hasCycleDFS(Graph g, int v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle);
+        //bool ifBipartite(Graph g, int src, vector<int>& color);
+        vector<int> bellmanFord(Graph g, size_t v, size_t src);
 }
