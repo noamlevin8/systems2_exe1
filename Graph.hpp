@@ -14,8 +14,8 @@ namespace ariel {
 
         private:
                 vector<vector<int>> graph;
-                int vertex_num;
-                int edge_num;
+                size_t vertex_num;
+                size_t edge_num;
                 int if_directed; // 1 - if directed, 0 - if not
 
         public:
@@ -23,8 +23,8 @@ namespace ariel {
                 void printGraph();
 
                 vector<vector<int>> getGraph();
-                int getVertexNum();
-                int getEdgeNum();
+                size_t getVertexNum();
+                size_t getEdgeNum();
                 int getIfDirected();                
 
                 Graph()

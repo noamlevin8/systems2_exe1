@@ -13,7 +13,7 @@ namespace Algorithms {
 
         size_t i;
 
-        for(i = 0; i < g.getGraph().size(); i++)
+        for(i = 0; i < g.getVertexNum(); i++)
         {
             if(g.getGraph()[v][i] != 0 && !visited[i])
             {
@@ -23,162 +23,166 @@ namespace Algorithms {
     }
 
     string isConnected(Graph g) {
-        // if(!g.getIfDirected())
-        //     return 0;
+        
+        size_t i;
 
-        // Doing DFS from the first vertex
-        vector<bool> visited(g.getGraph().size(),false);
-        dfs(g, 0, visited);
-
-        // Checking if all the vertices are visited
-        for(bool v : visited)
+        for(i = 0; i < g.getVertexNum(); i++)
         {
-            if(!v)
-                return "0";
+            // Doing DFS from the vertex i
+            vector<bool> visited(g.getVertexNum(),false);
+            dfs(g, i, visited);
+
+            // Checking if all the vertices are visited
+            for(bool v : visited)
+            {
+                if(!v)
+                    return "0";
+            }
         }
 
         return "1";
     }
 
-    string shortestPath(Graph g, int start, int end) { // Negative cycle
+    string shortestPath(Graph g, size_t start, size_t end) { // Negative cycle
 
-        int size = g.getGraph().size();
-        int dis[size][size]; 
-        int Next[size][size]; 
+        // if(negativeCycle(g) != "No negative cycle found")
+        //     return "-1";
 
-        const int INF = 1e7;
+        size_t V = g.getVertexNum();
+        vector<int> dist(V, numeric_limits<int>::max());
+        vector<int> parent(V, -1);
+        dist[start] = 0;
 
+        size_t i, j, k;
 
-        for (size_t i = 0; i < size; i++) 
-        { 
-            for (size_t j = 0; j < size; j++) 
-            { 
-                if(g.getGraph()[i][j] == 0)
-                    dis[i][j] = INF; 
-
-                else
-                    dis[i][j] = g.getGraph()[i][j];
-    
-                // No edge between node 
-                // i and j 
-                if (g.getGraph()[i][j] == 0) 
-                    Next[i][j] = -1; 
-                else
-                    Next[i][j] = j; 
-            } 
-        }
-
-        size_t k, i, j;
-
-        for(k = 0; k < g.getGraph().size(); k++)
+        // Relax |V| - 1 times
+        for(k = 0; k < V - 1; k++)
         {
-            for(i = 0; i < g.getGraph().size(); i++)
+            for(i = 0; i < V; i++)
             {
-                for(j = 0; j < g.getGraph()[0].size(); j++)
+                for(j = 0; j < V; j++)
                 {
-                    if(dis[i][k] != INF && dis[k][j] != INF)
+                    if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
                     {
-                        if(dis[i][j] > (dis[i][k] + dis[i][k]))
-                        {
-                            dis[i][j] = dis[i][k] + dis[i][k];
-                            Next[i][j] = Next[i][k];
-                        }
+                        dist[j] = dist[i] + g.getGraph()[i][j];
+                        parent[j] = i;
                     }
                 }
             }
         }
 
-        // If there's no path between 
-        // node u and v, simply return 
-        // an empty array 
-        if (Next[start][end] == -1) 
-            return "-1"; 
-    
-        // Storing the path in a vector 
-        vector<int> path = { start }; 
+        if(dist[end] == numeric_limits<int>::max())
+            return "-1";
+        
+        // Check for a negative cycle
+        for(i = 0; i < V; i++)
+        {
+            for(j = 0; j < V; j++)
+            {
+                if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
+                {
+                    return "-1";
+                }
+            }
+        }
 
-        while (start != end) 
-        { 
-            start = Next[start][end]; 
-            path.push_back(start); 
-        } 
+        // cout << "dist:";
+        // for(i = 0; i < V; i++)
+        // {
+        //     cout << " " << i << " - " << dist[i] << ",";
+        // }
+        // cout << endl;
 
-        string result;
 
-        size_t n = path.size();
+        string path;
 
-        for (size_t i = 0; i < n - 1; i++) 
-            result += to_string(path[i]) + "->"; 
+        path = to_string(end);
 
-        result += to_string(path[n - 1]); 
+        i = static_cast<size_t>(parent[end]);
 
+        while(i != start)
+        {
+            path = to_string(i) + "->" + path;
+            i = static_cast<size_t>(parent[i]);
+        }
+        
+        path = to_string(start) + "->" + path;
+
+        return path;
+    }
+
+
+    int DFSVisit(Graph g, size_t u, vector<string> color, vector<int>& parent)
+    {
+        color[u] = "gray";
+
+        size_t i;
+        int result = -1;
+
+        for(i = 0; i < g.getVertexNum(); i++)
+        {
+            if(u != i && g.getGraph()[u][i] != 0)
+            {
+                if(!g.getIfDirected() && parent[u] == i)
+                    continue;
+
+                if(color[i] == "white")
+                {
+                    parent[i] = u;
+                    result = DFSVisit(g, i, color, parent);
+
+                    if(result != -1)
+                        break;
+                }
+                else if(color[i] == "gray")
+                {
+                    parent[i] = u;
+                    return i;
+                }
+            }
+        }
+        color[u] = "black";
+        
         return result;
     }
 
-    // bool hasCycleDFS(Graph g, size_t v, vector<bool>& visited, unordered_map<int,int>& parent, string& cycle)
-    // {
-    //     visited[v] = true;
 
-    //     size_t i;
+    string isContainsCycle(Graph g) {
 
-    //     for(i = 0; i < g.getGraph()[v].size(); i++)
-    //     {
-    //         int neighbor = g.getGraph()[v][i];
+        vector<string> color(g.getVertexNum(), "white");
+        vector<int> parent(g.getVertexNum(), -1);
+    
+        size_t i;
+        int j;
+        int result;
 
-    //         if(!visited[static_cast<size_t>(neighbor)])
-    //         {
-    //             parent[neighbor] = v;
+        for(i = 0; i < g.getVertexNum(); i++)
+        {
+            if(color[i] == "white")
+                result = DFSVisit(g, i, color, parent);
 
-    //             if(hasCycleDFS(g, neighbor, visited, parent, cycle))
-    //             {
-    //                 cycle += to_string(v);
-    //                 return true;
-    //             }
-    //         }
-    //         else if(parent.find(v) != parent.end() && parent[v] != neighbor)
-    //         {
-    //             cycle += to_string(neighbor) + "->";
+            if(result != -1)
+            {
+                string path;
 
-    //             int u = v;
+                path = to_string(result);
 
-    //             while(u != neighbor)
-    //             {
-    //                 cycle += to_string(u) + "->";
-    //                 u = parent[u];
-    //             }
+                j = parent[static_cast<size_t>(result)];
 
-    //             cycle += to_string(neighbor);
+                while(j != result)
+                {
+                    path = to_string(j) + "->" + path;
+                    j = parent[static_cast<size_t>(j)];
+                }
+                
+                path = to_string(result) + "->" + path;
 
-    //             return true;
-    //         }
-    //     }
+                return "The cycle is: " + path;
+            }
+        }
 
-    //     return false;
-    // }
-
-    // string isContainsCycle(Graph g) {
-
-    //     vector<bool> visited(g.getGraph().size(), false);
-
-    //     unordered_map<int,int> parent;
-
-    //     string cycle;
-
-    //     size_t i;
-
-    //     for(i = 0; i < g.getGraph().size(); i++)
-    //     {
-    //         if(!visited[i])
-    //         {
-    //             if(hasCycleDFS(g, i, visited, parent, cycle))
-    //             {
-    //                 return cycle;
-    //             }
-    //         }
-    //     }
-
-    //     return "0";
-    // }
+        return "0";
+    }
 
     // bool ifBipartite(Graph g, size_t src, vector<int>& color) 
     // {
@@ -249,7 +253,7 @@ namespace Algorithms {
     //     return result;
     // }
 
-    vector<int> bellmanFord(Graph g, size_t V, size_t src)
+    string bellmanFord(Graph g, size_t V, size_t src)
     {
         vector<int> dist(V, numeric_limits<int>::max());
         vector<int> parent(V, -1);
@@ -260,11 +264,12 @@ namespace Algorithms {
         // Relax |V| - 1 times (if directed)
         for(k = 0; k < V - 1; k++)
         {
-            for(i = 0; i < g.getGraph().size(); i++)
+            for(i = 0; i < V; i++)
             {
-                for(j = 0; j < g.getGraph()[0].size(); j++)
+                for(j = 0; j < V; j++)
                 {
-                    if(dist[i] != numeric_limits<int>::max() && dist[i] + g.getGraph()[i][j] < dist[j])
+                    //cout << "test dist: " << i << " - " << dist[i] << endl;
+                    if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
                     {
                         dist[j] = dist[i] + g.getGraph()[i][j];
                         parent[j] = i;
@@ -273,42 +278,57 @@ namespace Algorithms {
             }
         }
 
-
-        for(i = 0; i < g.getGraph().size(); i++)
+        for(i = 0; i < V; i++)
         {
-            for(j = 0; j < g.getGraph()[0].size(); j++)
+            for(j = 0; j < V; j++)
             {
-                if(dist[i] != numeric_limits<int>::max() && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
+                if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
-                    vector<int> cycle;
-                    size_t node = j;
+                    string path;
 
-                    for (int i = 0; i < V; i++) 
+                    path = to_string(j);
+
+                    size_t node = static_cast<size_t>(parent[j]);
+
+                    while(i != j)
                     {
+                        path = to_string(i) + "->" + path;
                         node = static_cast<size_t>(parent[node]);
                     }
+                    
+                    path = to_string(j) + "->" + path;
 
-                    size_t start = node;
+                    return path;
 
-                    do 
-                    {
-                        cycle.push_back(static_cast<int>(node));
-                        node = static_cast<size_t>(parent[node]);
-                    } while (node != start);
+                    // vector<int> cycle;
+                    // size_t node = j;
 
-                    // while (node != start)
+                    // for (int i = 0; i < V; i++) 
                     // {
-                    //     cycle.push_back(node);
-                    //     node = parent[node];
+                    //     node = static_cast<size_t>(parent[node]);
                     // }
 
-                    cycle.push_back(static_cast<int>(start));
+                    // size_t start = node;
 
-                    return cycle;
+                    // do 
+                    // {
+                    //     cycle.push_back(static_cast<int>(node));
+                    //     node = static_cast<size_t>(parent[node]);
+                    // } while (node != start);
+
+                    // // // while (node != start)
+                    // // // {
+                    // // //     cycle.push_back(node);
+                    // // //     node = parent[node];
+                    // // // }
+
+                    // cycle.push_back(static_cast<int>(start));
+
+                    // return cycle;
                 }
             }
         }
-        return {}; // No negative cycle found
+        return "No negative cycle found"; // No negative cycle found
     }
 
 
@@ -316,24 +336,23 @@ namespace Algorithms {
 
         size_t V = static_cast<size_t>(g.getVertexNum());
 
-        vector<int> cycle = bellmanFord(g, V, 0);
+        return bellmanFord(g, V, 0);
 
-        string result;
+        // string result;
 
-        if (cycle.empty()) 
-        {
-            return "No negative cycle found";
-        } 
+        // if (cycle.empty()) 
+        // {
+        //     return "No negative cycle found";
+        // } 
 
-        else 
-        {
-            result += "Negative cycle found: ";
-            for (int node : cycle) 
-            {
-                result += to_string(node) + "->";
-            }
-        }
+        // else 
+        // {
+        //     result += "Negative cycle found: ";
+        //     for (int node : cycle) 
+        //     {
+        //         result += to_string(node) + "->";
+        //     }
+        // }
 
-        return result;
     }
 }

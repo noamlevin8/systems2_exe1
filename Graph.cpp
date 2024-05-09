@@ -16,7 +16,7 @@ void Graph::loadGraph(vector<vector<int>> new_graph, int directed) {
     if_directed = directed;
 
     size_t i, j;
-    int count = 0;
+    size_t count = 0;
 
     for(i = 0; i < new_graph.size(); i++)
     {
@@ -42,12 +42,12 @@ vector<vector<int>> Graph::getGraph()
     return graph;
 }
 
-int Graph::getVertexNum()
+size_t Graph::getVertexNum()
 {
     return vertex_num;
 }
 
-int Graph::getEdgeNum()
+size_t Graph::getEdgeNum()
 {
     return edge_num;
 }
