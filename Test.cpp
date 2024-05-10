@@ -1,3 +1,6 @@
+// ID: 326662574
+// MAIL: noamlevin11@gmail.com
+
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"
@@ -68,28 +71,45 @@ TEST_CASE("Test shortestPath")
     g.loadGraph(graph3, 1);
     CHECK(Algorithms::shortestPath(g, 0, 3) == "0->1->2->3"); 
 
-    vector<vector<int>> graph4 = { // Directed graph without a path (Negative cycle)
+    vector<vector<int>> graph4 = { // Directed graph with a path (Negative cycle)
+        {0, 0, -2, 0, 0},
+        {0, 0, 0, 5, 2},
+        {1, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, -1, 0}};
+    g.loadGraph(graph4, 1);
+    CHECK(Algorithms::shortestPath(g, 1, 3) == "1->4->3");
+
+    vector<vector<int>> graph5 = { // Directed graph without a path (Negative cycle)
         {0, 1, 0},
         {1, 0, 1},
         {-3, 0, 0}};
-    g.loadGraph(graph4, 1);
+    g.loadGraph(graph5, 1);
     CHECK(Algorithms::shortestPath(g, 0, 2) == "-1");
 
-    vector<vector<int>> graph5 = { // Undirected graph without a path (Negative cycle)
+    vector<vector<int>> graph6 = { // Undirected graph with a path (Negative cycle)
         {0, 1, 0, 1},
         {1, 0, 1, 0},
         {0, 1, 0, -3},
         {1, 0, -3, 0}};
-    g.loadGraph(graph5, 0);
-    CHECK(Algorithms::shortestPath(g, 0, 3) == "-1");
+    g.loadGraph(graph6, 0);
+    CHECK(Algorithms::shortestPath(g, 0, 3) == "0->1->2->3");
 
-    // vector<vector<int>> graph6 = { // Shortest path = 0
-    //     {0, 1, 0, 1},
-    //     {1, 0, 1, 0},
-    //     {0, 1, 0, -2},
-    //     {1, 0, -2, 0}};
-    // g.loadGraph(graph6, 0);
-    // CHECK(Algorithms::shortestPath(g, 0, 3) == "0");
+    vector<vector<int>> graph7 = { // Undirected graph without a path (Negative cycle)
+        {0, -2, 1, 0},
+        {-2, 0, -1, 0},
+        {1, -1, 0, 0},
+        {0, 0, 0, 0}};
+    g.loadGraph(graph7, 0);
+    CHECK(Algorithms::shortestPath(g, 0, 2) == "-1");
+
+    vector<vector<int>> graph8 = { // Shortest path = 0
+        {0, 1, 0, 1},
+        {1, 0, 1, 0},
+        {0, 1, 0, -2},
+        {1, 0, -2, 0}};
+    g.loadGraph(graph8, 0);
+    CHECK(Algorithms::shortestPath(g, 0, 3) == "0->1->2->3");
 }
 
 TEST_CASE("Test isContainsCycle")
@@ -182,29 +202,29 @@ TEST_CASE("Test NegativeCycle")
         {0, 0, 0, 0, 0}};
     g.loadGraph(graph1, 1);
     CHECK(Algorithms::negativeCycle(g) == "Negative cycle found: 0->3->1->0");
-    
-    vector<vector<int>> graph2 = { // Undirected graph without a negative cycle
-        {0, 1, 0},
-        {1, 0, 1},
-        {0, 1, 0}};
-    g.loadGraph(graph2, 0);
-    CHECK(Algorithms::negativeCycle(g) == "No negative cycle found");
 
-    vector<vector<int>> graph3 = { // Directed graph without a negative cycle
+    vector<vector<int>> graph2 = { // Directed graph without a negative cycle
         {0, -1, 2, 0},
         {0, 0, 0, -1},
         {0, 0, 0, -1},
         {0, 0, 0, 0}};
-    g.loadGraph(graph3, 1);
+    g.loadGraph(graph2, 1);
+    CHECK(Algorithms::negativeCycle(g) == "No negative cycle found");
+    
+    vector<vector<int>> graph3 = { // Undirected graph without a negative cycle
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g.loadGraph(graph3, 0);
     CHECK(Algorithms::negativeCycle(g) == "No negative cycle found");
 
-    // vector<vector<int>> graph6 = {
-    //     {0, 1, 0, 1},
-    //     {1, 0, 1, 0},
-    //     {0, 1, 0, -2},
-    //     {1, 0, -2, 0}};
-    // g.loadGraph(graph6, 0);
-    // CHECK(Algorithms::negativeCycle(g) == "No negative cycle found"); // Shortest path = 0
+    vector<vector<int>> graph4 = { // Undirected graph with a negative cycle
+        {0, -1, 0, 4},
+        {-1, 0, 3, 0},
+        {0, 3, 0, -7},
+        {4, 0, -7, 0}};
+    g.loadGraph(graph4, 0);
+    CHECK(Algorithms::negativeCycle(g) == "Negative cycle found: 0->1->2->3->0");
 }
 
 TEST_CASE("Test invalid graph")

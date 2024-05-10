@@ -12,11 +12,11 @@ namespace ariel {
 
         class Graph {
 
-        private:
-                vector<vector<int>> graph;
-                size_t vertex_num;
-                size_t edge_num;
-                int if_directed; // 1 - if directed, 0 - if not
+        // Private fields
+        vector<vector<int>> graph;
+        size_t vertex_num;
+        size_t edge_num;
+        int if_directed; // 1 - if directed, 0 - if not
 
         public:
                 void loadGraph(vector<vector<int>> graph, int directed);
@@ -29,7 +29,6 @@ namespace ariel {
 
                 Graph()
                 {
-                        //fill(graph.begin(), graph.end(), 0);
                         graph = {};
                         vertex_num = 0;
                         edge_num = 0;

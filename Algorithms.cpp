@@ -62,6 +62,9 @@ namespace Algorithms {
             {
                 for(j = 0; j < V; j++)
                 {
+                    if(!g.getIfDirected() && parent[i] == j)
+                        continue;
+
                     if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
                     {
                         dist[j] = dist[i] + g.getGraph()[i][j];
@@ -79,7 +82,7 @@ namespace Algorithms {
         {
             for(j = 0; j < V; j++)
             {
-                if(!g.getIfDirected() && parent[j] == i)
+                if(!g.getIfDirected() && parent[i] == j)
                     continue;
 
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
@@ -267,6 +270,9 @@ namespace Algorithms {
             {
                 for(j = 0; j < V; j++)
                 {
+                    if(!g.getIfDirected() && parent[i] == j)
+                        continue;
+
                     if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
                     {
                         dist[j] = dist[i] + g.getGraph()[i][j];
@@ -280,12 +286,12 @@ namespace Algorithms {
         {
             for(j = 0; j < V; j++)
             {
-                // if(!g.getIfDirected() && parent[j] == i)
-                //     continue;
+                if(!g.getIfDirected() && parent[i] == j)
+                    continue;
 
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
-                    //parent[j] = i;
+                    parent[j] = i;
 
                     string path;
 
