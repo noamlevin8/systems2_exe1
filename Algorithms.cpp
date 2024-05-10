@@ -45,9 +45,6 @@ namespace Algorithms {
 
     string shortestPath(Graph g, size_t start, size_t end) { // Negative cycle
 
-        // if(negativeCycle(g) != "No negative cycle found")
-        //     return "-1";
-
         size_t V = g.getVertexNum();
         vector<int> dist(V, numeric_limits<int>::max());
         vector<int> parent(V, -1);
@@ -85,14 +82,6 @@ namespace Algorithms {
                 }
             }
         }
-
-        // cout << "dist:";
-        // for(i = 0; i < V; i++)
-        // {
-        //     cout << " " << i << " - " << dist[i] << ",";
-        // }
-        // cout << endl;
-
 
         string path;
 
@@ -184,74 +173,79 @@ namespace Algorithms {
         return "0";
     }
 
-    // bool ifBipartite(Graph g, size_t src, vector<int>& color) 
-    // {
-    //     queue<int> q;
+    string isBipartite(Graph g) {
 
-    //     q.push(src);
+        vector<int> parent (g.getVertexNum(), -1);
+        vector<string> color (g.getVertexNum(), "white");
+        queue<size_t> q;
+        size_t u, v;
 
-    //     color[src] = 0; // Color the source node with 0
+        color[0] = "blue";
+        q.push(0);
 
-    //     while (!q.empty()) 
-    //     {
-    //         size_t u = q.front();
-    //         q.pop();
+        while(!q.empty())
+        {
+            u = q.front();
+            q.pop();
 
-    //         for (size_t v : g.getGraph()[u]) 
-    //         {
-    //             if (color[v] == -1) 
-    //             {
-    //                 color[v] = 1 - color[u]; // Color adjacent node with different color
-    //                 q.push(v);
-    //             } 
-                
-    //             else if (color[v] == color[u]) 
-    //             {
-    //                 return false; // If adjacent nodes have the same color, graph is not bipartite
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
+            for(v = 0; v < g.getVertexNum(); v++)
+            {
+                if(g.getGraph()[u][v] != 0)
+                {
+                    if(parent[u] == v)
+                        continue;
 
-    // string isBipartite(Graph g) {
+                    if(color[v] == color[u])
+                        return "0";
+                    
+                    if(color[v] == "white")
+                    {
+                        parent[v] = u;
 
-    //     vector<int> color(g.getGraph().size(), -1); // Initialize color array, -1 indicates uncolored
-    //     vector<vector<int>> bipartition(2);
+                        if(color[u] == "blue")
+                            color[v] = "red";
 
-    //     size_t i;
+                        else
+                            color[v] = "blue";
+                    }
 
-    //     for(i = 0; i < g.getGraph().size(); i++)
-    //     {
-    //         if(color[i] == -1)
-    //         {
-    //             if(!ifBipartite(g, i, color))
-    //             {
-    //                 return "0";
-    //             }
-    //         }
+                    if(v != u)
+                        q.push(v);
+                }
+            }
+        }
 
-    //         // Cast the index to size_t
-    //         bipartition[static_cast<size_t>(color[i])].push_back(static_cast<int>(i)); // Add node to appropriate partition based on color
-    //     }
+        string a, b;
 
-    //     string result;
+        a = "A={";
+        b = "B={";
 
-    //     result += "The graph is bipartite: A = {";
-    //     for (int node : bipartition[0]) {
-    //         result += to_string(node) + ",";
-    //     }
+        for(v = 0; v < g.getVertexNum(); v++)
+        {
+            if(color[v] == "blue")
+            {
+                if(a == "A={")
+                    a += to_string(v);
 
-    //     result += "}, B = {";
+                else
+                    a += ", " + to_string(v);
+            }
 
-    //     for (int node : bipartition[1]) {
-    //         result += to_string(node) + ",";
-    //     }
+            else
+            {
+                if(b == "B={")
+                    b += to_string(v);
 
-    //     result += "}";
+                else
+                    b += ", " + to_string(v);
+            }
+        }
 
-    //     return result;
-    // }
+        a += "}";
+        b += "}";
+
+        return "The graph is bipartite: " + a + ", " + b;
+    }
 
     string bellmanFord(Graph g, size_t V, size_t src)
     {
@@ -261,14 +255,13 @@ namespace Algorithms {
 
         size_t i, j, k;
 
-        // Relax |V| - 1 times (if directed)
+        // Relax |V| - 1 times
         for(k = 0; k < V - 1; k++)
         {
             for(i = 0; i < V; i++)
             {
                 for(j = 0; j < V; j++)
                 {
-                    //cout << "test dist: " << i << " - " << dist[i] << endl;
                     if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
                     {
                         dist[j] = dist[i] + g.getGraph()[i][j];
@@ -284,51 +277,27 @@ namespace Algorithms {
             {
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
+                    parent[j] = i;
+
                     string path;
 
-                    path = to_string(j);
+                    path = to_string(i);
 
-                    size_t node = static_cast<size_t>(parent[j]);
+                    size_t node = static_cast<size_t>(parent[i]);
 
-                    while(i != j)
+                    while(node != i)
                     {
-                        path = to_string(i) + "->" + path;
+                        path = to_string(node) + "->" + path;
                         node = static_cast<size_t>(parent[node]);
                     }
                     
-                    path = to_string(j) + "->" + path;
+                    path = to_string(i) + "->" + path;
 
-                    return path;
-
-                    // vector<int> cycle;
-                    // size_t node = j;
-
-                    // for (int i = 0; i < V; i++) 
-                    // {
-                    //     node = static_cast<size_t>(parent[node]);
-                    // }
-
-                    // size_t start = node;
-
-                    // do 
-                    // {
-                    //     cycle.push_back(static_cast<int>(node));
-                    //     node = static_cast<size_t>(parent[node]);
-                    // } while (node != start);
-
-                    // // // while (node != start)
-                    // // // {
-                    // // //     cycle.push_back(node);
-                    // // //     node = parent[node];
-                    // // // }
-
-                    // cycle.push_back(static_cast<int>(start));
-
-                    // return cycle;
+                    return "Negative cycle found: " + path;
                 }
             }
         }
-        return "No negative cycle found"; // No negative cycle found
+        return "No negative cycle found";
     }
 
 
@@ -337,22 +306,5 @@ namespace Algorithms {
         size_t V = static_cast<size_t>(g.getVertexNum());
 
         return bellmanFord(g, V, 0);
-
-        // string result;
-
-        // if (cycle.empty()) 
-        // {
-        //     return "No negative cycle found";
-        // } 
-
-        // else 
-        // {
-        //     result += "Negative cycle found: ";
-        //     for (int node : cycle) 
-        //     {
-        //         result += to_string(node) + "->";
-        //     }
-        // }
-
     }
 }
