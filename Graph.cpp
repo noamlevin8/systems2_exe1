@@ -22,6 +22,12 @@ void Graph::loadGraph(vector<vector<int>> new_graph, int directed) {
     {
         for(j = 0; j < new_graph[0].size(); j++)
         {
+            if(i == j && new_graph[i][j] != 0)
+                throw invalid_argument("Invalid graph: The graph has a self edge.");
+
+            if(!directed && i != j && new_graph[i][j] != new_graph[j][i])
+                throw invalid_argument("Invalid graph: The graph is not undirected.");
+
             if(new_graph[i][j] != 0)
                 count++;
         }

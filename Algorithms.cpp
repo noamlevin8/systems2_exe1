@@ -45,6 +45,9 @@ namespace Algorithms {
 
     string shortestPath(Graph g, size_t start, size_t end) { // Negative cycle
 
+        if(start >= g.getVertexNum() || end >= g.getVertexNum())
+            throw invalid_argument("Invalid vertex: start/end out of range.");
+
         size_t V = g.getVertexNum();
         vector<int> dist(V, numeric_limits<int>::max());
         vector<int> parent(V, -1);
@@ -76,6 +79,9 @@ namespace Algorithms {
         {
             for(j = 0; j < V; j++)
             {
+                if(!g.getIfDirected() && parent[j] == i)
+                    continue;
+
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
                     return "-1";
@@ -207,10 +213,9 @@ namespace Algorithms {
 
                         else
                             color[v] = "blue";
+                        
+                       q.push(v); 
                     }
-
-                    if(v != u)
-                        q.push(v);
                 }
             }
         }
@@ -275,9 +280,12 @@ namespace Algorithms {
         {
             for(j = 0; j < V; j++)
             {
+                // if(!g.getIfDirected() && parent[j] == i)
+                //     continue;
+
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
-                    parent[j] = i;
+                    //parent[j] = i;
 
                     string path;
 
