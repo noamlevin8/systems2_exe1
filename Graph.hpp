@@ -13,26 +13,18 @@ namespace ariel {
         class Graph {
 
         // Private fields
-        vector<vector<int>> graph;
-        size_t vertex_num;
-        size_t edge_num;
+        vector<vector<int>> graph; // The adjacency matrix
+        size_t vertex_num; // Number of vertecis in the graph
+        size_t edge_num; // Number of edges in the graph
         int if_directed; // 1 - if directed, 0 - if not
 
         public:
-                void loadGraph(vector<vector<int>> graph, int directed);
-                void printGraph();
+                void loadGraph(vector<vector<int>> graph, int directed); // Loading the graph to our object
+                void printGraph(); // Prints the number of vertices and the number of edges
 
-                vector<vector<int>> getGraph();
-                size_t getVertexNum();
-                size_t getEdgeNum();
-                int getIfDirected();                
-
-                Graph()
-                {
-                        graph = {};
-                        vertex_num = 0;
-                        edge_num = 0;
-                        if_directed = 0;
-                }
+                vector<vector<int>> getGraph(); // Returns the adjacency matrix
+                size_t getVertexNum(); // Returns the number of vertecis in the graph
+                size_t getEdgeNum(); // Returns the number of edges in the graph
+                int getIfDirected(); // Returns if the graph is directed or not               
         };
 }

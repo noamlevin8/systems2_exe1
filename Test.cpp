@@ -225,6 +225,14 @@ TEST_CASE("Test NegativeCycle")
         {4, 0, -7, 0}};
     g.loadGraph(graph4, 0);
     CHECK(Algorithms::negativeCycle(g) == "Negative cycle found: 0->1->2->3->0");
+
+    vector<vector<int>> graph5 = { // Undirected graph with a negative cycle (not from 0)
+        {0, 0, 0, 0},
+        {0, 0, -1, -1},
+        {0, -1, 0, -1},
+        {0, -1, -1, 0}};
+    g.loadGraph(graph5, 0);
+    CHECK(Algorithms::negativeCycle(g) == "Negative cycle found: 1->2->3->1");
 }
 
 TEST_CASE("Test invalid graph")
