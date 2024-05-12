@@ -32,6 +32,8 @@ In this file, the implementation of the functions defined in `Graph.hpp` resides
 
 I've also created a namespace named `Algorithms`, within which there are 5 main functions and 3 additional helper functions.
 
+The `Algorithms` namespace is characterized by two files (`Algorithms.hpp`, `Algorithms.cpp`).
+
 #### Algorithms.hpp
 
 In the header file of the `Algorithms` namespace, I've defined 8 functions:
