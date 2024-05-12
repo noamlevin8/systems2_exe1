@@ -2,7 +2,6 @@
 
 ## System Programming 2 - Task 1
 
-
 In this project, I've created a namespace named `ariel`, within which I've defined the class `Graph`.
 
 ### Graph Class
@@ -27,6 +26,7 @@ Additionally, I've defined 6 functions (4 get functions for the fields):
 
 In this file, the implementation of the functions defined in `Graph.hpp` resides.
 
+### Additional Files
 
 #### Algorithms Namespace
 
@@ -48,7 +48,6 @@ In the header file of the `Algorithms` namespace, I've defined 8 functions:
 #### Algorithms.cpp
 
 This file contains the implementation of all the functions defined in `Algorithms.hpp`.
-
 
 ### Additional Files
 
