@@ -97,7 +97,16 @@ namespace Algorithms {
                 // If we could do another relax there is a negative cycle
                 if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j]) // Found a negative cycle
                 {
-                    return "-1";
+                    // Checking if the negative cycle is part of our path
+                    size_t cur = static_cast<size_t>(parent[end]);
+
+                    while(cur != start)
+                    {
+                        if(j == cur)
+                           return "-1";
+
+                        cur = static_cast<size_t>(parent[cur]); 
+                    }
                 }
             }
         }

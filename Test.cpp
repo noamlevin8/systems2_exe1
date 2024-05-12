@@ -257,4 +257,10 @@ TEST_CASE("Test invalid graph")
         {1, 0, 1},
         {0, 0, 0}};
     CHECK_THROWS(g.loadGraph(graph3, 0));
+
+    vector<vector<int>> graph4 = { // Invalid directed value
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 0, 0}};
+    CHECK_THROWS(g.loadGraph(graph4, 2));
 }
