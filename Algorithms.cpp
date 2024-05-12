@@ -298,8 +298,8 @@ namespace Algorithms {
     {
         vector<int> dist(V, numeric_limits<int>::max());
         vector<int> parent(V, -1);
-        dist[src] = 0;
-        bool flag = false; // If we don't have any edge from a vertex we want to move to the next one until we find one
+        dist[src] = 0; // Src is 0
+        bool flag = false; // If we don't have any edge from a vertex we want to move to the next one
 
         size_t i, j, k;
 
@@ -314,16 +314,22 @@ namespace Algorithms {
                     if(!g.getIfDirected() && parent[i] == j)
                         continue;
 
-                    if(dist[i] != numeric_limits<int>::max() && g.getGraph()[i][j] != 0 && dist[i] + g.getGraph()[i][j] < dist[j])
+                    if(g.getGraph()[i][j] != 0)
                     {
-                        dist[j] = dist[i] + g.getGraph()[i][j];
-                        parent[j] = i;
                         flag = true; // Updating flag
+
+                        if(dist[i] != numeric_limits<int>::max() && dist[i] + g.getGraph()[i][j] < dist[j])
+                        {
+                            dist[j] = dist[i] + g.getGraph()[i][j];
+                            parent[j] = i;
+                        }
                     }
                 }
 
-                if(!flag && i < V)
-                    dist[i] = 0; // We still didn't find an edge
+                if(!flag && i+1 < V)
+                    dist[i+1] = 0; // We didn't find an edge
+                
+                flag = false;
             }
         }
 
