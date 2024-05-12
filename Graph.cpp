@@ -13,6 +13,9 @@ void Graph::loadGraph(vector<vector<int>> new_graph, int directed = 0) { // If w
     if(new_graph.size() != new_graph[0].size())
         throw invalid_argument("Invalid graph: The graph is not a square matrix.");
 
+    if(directed != 1 || directed != 0)
+        throw invalid_argument("Invalid graph: Directed value is not 0 or 1.");
+
     graph = new_graph;
     vertex_num = new_graph.size();
     if_directed = directed;
