@@ -99,13 +99,15 @@ namespace Algorithms {
                 {
                     // Checking if the negative cycle is part of our path
                     size_t cur = static_cast<size_t>(parent[end]);
+                    int count = 1;
 
-                    while(cur != start)
+                    while(cur != start && count < V)
                     {
                         if(j == cur)
                            return "-1";
 
                         cur = static_cast<size_t>(parent[cur]); 
+                        count++;
                     }
                 }
             }
@@ -190,11 +192,14 @@ namespace Algorithms {
 
                 j = parent[static_cast<size_t>(result)];
 
+                int count = 1;
+
                 // Looping backwards from "result" until we get to the "result" vertex again
-                while(j != result)
+                while(j != result && count < g.getVertexNum())
                 {
                     path = to_string(j) + "->" + path;
                     j = parent[static_cast<size_t>(j)];
+                    count++;
                 }
                 
                 path = to_string(result) + "->" + path;
@@ -363,11 +368,14 @@ namespace Algorithms {
 
                     size_t node = static_cast<size_t>(parent[i]);
 
+                    int count = 1;
+
                     // Looping backwards from i until we get to the i vertex again
-                    while(node != i)
+                    while(node != i && count < V)
                     {
                         cycle = to_string(node) + "->" + cycle;
                         node = static_cast<size_t>(parent[node]);
+                        count++;
                     }
                     
                     cycle = to_string(i) + "->" + cycle;
