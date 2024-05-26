@@ -7,8 +7,8 @@ CXX=clang++
 CXXFLAGS=-std=c++11 -Werror -Wsign-conversion
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
 
-SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp
-OBJECTS=$(subst .cpp,.o,$(SOURCES))
+SOURCES=Graph.cpp Algorithms.cpp TestCounter.cpp Test.cpp Graph.hpp Algorithms.hpp
+OBJECTS=$(subst .cpp,.o,$(filter-out Algorithms.hpp Graph.hpp, $(SOURCES)))
 
 run: test
 	./$^
